@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Something for you ❤️</title>
+<title>A little secret ❤️</title>
 
 <style>
 * {
@@ -14,111 +14,187 @@
 body {
     margin: 0;
     min-height: 100vh;
+    background: radial-gradient(circle, #32152c, #090510 75%);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    background: linear-gradient(135deg, #ffe1ec, #ffc0d5, #f8d9ff);
-    font-family: Georgia, serif;
     overflow: hidden;
-    text-align: center;
-    color: #8e3155;
+    font-family: Georgia, serif;
+    color: white;
 }
 
 h1 {
-    font-size: 28px;
+    color: #ff9bc9;
+    font-size: 25px;
+    text-align: center;
     margin-bottom: 35px;
+    letter-spacing: 2px;
 }
 
-.heart {
-    font-size: 110px;
+.heart-container {
+    position: relative;
+    width: min(82vw, 390px);
+    height: min(82vw, 390px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    animation: beat 1s infinite;
-    user-select: none;
-    filter: drop-shadow(0 5px 12px #e77a9c);
+    animation: heartbeat 1.5s infinite;
+    filter: drop-shadow(0 0 13px #ff4b9b);
 }
 
-@keyframes beat {
+@keyframes heartbeat {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.18); }
+    50% { transform: scale(1.045); }
 }
 
-p {
-    font-size: 19px;
-    margin-top: 30px;
-}
-
-#message {
-    display: none;
-    font-size: 30px;
-    font-weight: bold;
-    margin-top: 25px;
-    animation: appear 1s ease;
-}
-
-@keyframes appear {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.small-heart {
+.half {
     position: absolute;
-    bottom: -30px;
-    animation: float 6s linear infinite;
-    pointer-events: none;
+    inset: 0;
+    transition: transform 1.5s cubic-bezier(.68,-0.2,.25,1.4);
+    overflow: hidden;
 }
 
-@keyframes float {
-    to {
-        transform: translateY(-110vh) rotate(360deg);
-        opacity: 0;
-    }
+.left {
+    clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
 }
 
-button {
-    margin-top: 20px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 25px;
-    background: #e779a0;
-    color: white;
+.right {
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+
+.heart-shape {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #ffb2d7, #ff2589, #ff80bd);
+    clip-path: polygon(
+        50% 92%, 10% 55%, 2% 38%,
+        3% 22%, 13% 9%, 29% 5%,
+        42% 12%, 50% 24%, 58% 12%,
+        71% 5%, 87% 9%, 97% 22%,
+        98% 38%, 90% 55%
+    );
+}
+
+.words {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 8px;
+    color: #fff0f7;
+    font-size: clamp(8px, 2.5vw, 12px);
+    line-height: 1.25;
+    font-weight: bold;
+    text-shadow: 0 0 5px #ff278c;
+    word-break: break-all;
+    text-align: center;
+}
+
+.left {
+    z-index: 2;
+}
+
+.right {
+    z-index: 2;
+}
+
+.heart-container.open .left {
+    transform: translateX(-65%) rotate(-12deg);
+}
+
+.heart-container.open .right {
+    transform: translateX(65%) rotate(12deg);
+}
+
+.message {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #ffacd1;
+    font-size: clamp(21px, 6vw, 32px);
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(.5);
+    transition: all 1s ease 0.5s;
+    text-shadow: 0 0 15px #ff4b9b;
+    z-index: 1;
+}
+
+.heart-container.open .message {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.instruction {
+    margin-top: 35px;
+    color: #ffc1dc;
     font-size: 16px;
-    cursor: pointer;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.heart-container.open {
+    animation: none;
 }
 </style>
 </head>
 
 <body>
 
-<h1>I have something to tell you...</h1>
+<h1>I HAVE SOMETHING TO TELL YOU...</h1>
 
-<div class="heart" onclick="revealMessage()">❤️</div>
+<div class="heart-container" id="heart"
+     onclick="openHeart()">
 
-<p>Touch the heart</p>
+    <div class="message">
+        I LOVE YOU ❤️
+    </div>
 
-<div id="message">
-    I like you ❤️
+    <div class="half left">
+        <div class="heart-shape"></div>
+        <div class="words" id="words1"></div>
+    </div>
+
+    <div class="half right">
+        <div class="heart-shape"></div>
+        <div class="words" id="words2"></div>
+    </div>
+
 </div>
 
+<p class="instruction" id="instruction">
+    ♡ Touch the heart ♡
+</p>
+
 <script>
-function revealMessage() {
-    document.getElementById("message").style.display = "block";
+
+const words =
+    ("I LOVE YOU ♥ TE AMO ♥ JE T'AIME ♥ " +
+     "TI AMO ♥ ICH LIEBE DICH ♥ " +
+     "愛してる ♥ 사랑해 ♥ " +
+     "EU TE AMO ♥ Я ТЕБЯ ЛЮБЛЮ ♥ " +
+     "我爱你 ♥ Σ'ΑΓΑΠΩ ♥ ").repeat(30);
+
+document.getElementById("words1").textContent = words;
+document.getElementById("words2").textContent = words;
+
+function openHeart() {
+
+    const heart = document.getElementById("heart");
+
+    heart.classList.toggle("open");
+
+    document.getElementById("instruction").textContent =
+        heart.classList.contains("open")
+        ? "♡ A little secret just for you ♡"
+        : "♡ Touch the heart ♡";
 }
 
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "small-heart";
-    heart.textContent = "♥";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (15 + Math.random() * 20) + "px";
-    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 8000);
-}
-
-setInterval(createHeart, 500);
 </script>
 
 </body>
