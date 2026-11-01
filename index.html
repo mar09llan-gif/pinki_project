@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Something for you ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(135deg, #ffe1ec, #ffc0d5, #f8d9ff);
+    font-family: Georgia, serif;
+    overflow: hidden;
+    text-align: center;
+    color: #8e3155;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 35px;
+}
+
+.heart {
+    font-size: 110px;
+    cursor: pointer;
+    animation: beat 1s infinite;
+    user-select: none;
+    filter: drop-shadow(0 5px 12px #e77a9c);
+}
+
+@keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+}
+
+p {
+    font-size: 19px;
+    margin-top: 30px;
+}
+
+#message {
+    display: none;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 25px;
+    animation: appear 1s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.small-heart {
+    position: absolute;
+    bottom: -30px;
+    animation: float 6s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes float {
+    to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    background: #e779a0;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>I have something to tell you...</h1>
+
+<div class="heart" onclick="revealMessage()">❤️</div>
+
+<p>Touch the heart</p>
+
+<div id="message">
+    I like you ❤️
+</div>
+
+<script>
+function revealMessage() {
+    document.getElementById("message").style.display = "block";
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "small-heart";
+    heart.textContent = "♥";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random() * 20) + "px";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 8000);
+}
+
+setInterval(createHeart, 500);
+</script>
+
+</body>
+</html>
