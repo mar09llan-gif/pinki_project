@@ -1,200 +1,109 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A little secret ❤️</title>
+<title>A little heart for you ❤️</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+    body {
+        margin: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+        color: white;
+    }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle, #32152c, #090510 75%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    font-family: Georgia, serif;
-    color: white;
-}
+    canvas {
+        width: min(95vw, 600px);
+        height: min(95vw, 600px);
+    }
 
-h1 {
-    color: #ff9bc9;
-    font-size: 25px;
-    text-align: center;
-    margin-bottom: 35px;
-    letter-spacing: 2px;
-}
-
-.heart-container {
-    position: relative;
-    width: min(82vw, 390px);
-    height: min(82vw, 390px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    animation: heartbeat 1.5s infinite;
-    filter: drop-shadow(0 0 13px #ff4b9b);
-}
-
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.045); }
-}
-
-.half {
-    position: absolute;
-    inset: 0;
-    transition: transform 1.5s cubic-bezier(.68,-0.2,.25,1.4);
-    overflow: hidden;
-}
-
-.left {
-    clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
-}
-
-.right {
-    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
-}
-
-.heart-shape {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #ffb2d7, #ff2589, #ff80bd);
-    clip-path: polygon(
-        50% 92%, 10% 55%, 2% 38%,
-        3% 22%, 13% 9%, 29% 5%,
-        42% 12%, 50% 24%, 58% 12%,
-        71% 5%, 87% 9%, 97% 22%,
-        98% 38%, 90% 55%
-    );
-}
-
-.words {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 8px;
-    color: #fff0f7;
-    font-size: clamp(8px, 2.5vw, 12px);
-    line-height: 1.25;
-    font-weight: bold;
-    text-shadow: 0 0 5px #ff278c;
-    word-break: break-all;
-    text-align: center;
-}
-
-.left {
-    z-index: 2;
-}
-
-.right {
-    z-index: 2;
-}
-
-.heart-container.open .left {
-    transform: translateX(-65%) rotate(-12deg);
-}
-
-.heart-container.open .right {
-    transform: translateX(65%) rotate(12deg);
-}
-
-.message {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    color: #ffacd1;
-    font-size: clamp(21px, 6vw, 32px);
-    font-weight: bold;
-    opacity: 0;
-    transform: scale(.5);
-    transition: all 1s ease 0.5s;
-    text-shadow: 0 0 15px #ff4b9b;
-    z-index: 1;
-}
-
-.heart-container.open .message {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.instruction {
-    margin-top: 35px;
-    color: #ffc1dc;
-    font-size: 16px;
-    letter-spacing: 1px;
-    text-align: center;
-}
-
-.heart-container.open {
-    animation: none;
-}
+    h2 {
+        color: pink;
+        text-align: center;
+        font-weight: normal;
+    }
 </style>
 </head>
 
 <body>
 
-<h1>I HAVE SOMETHING TO TELL YOU...</h1>
-
-<div class="heart-container" id="heart"
-     onclick="openHeart()">
-
-    <div class="message">
-        I LOVE YOU ❤️
-    </div>
-
-    <div class="half left">
-        <div class="heart-shape"></div>
-        <div class="words" id="words1"></div>
-    </div>
-
-    <div class="half right">
-        <div class="heart-shape"></div>
-        <div class="words" id="words2"></div>
-    </div>
-
-</div>
-
-<p class="instruction" id="instruction">
-    ♡ Touch the heart ♡
-</p>
+<h2>A little heart for you ❤️</h2>
+<canvas id="heart"></canvas>
 
 <script>
+const canvas = document.getElementById("heart");
+const ctx = canvas.getContext("2d");
 
-const words =
-    ("I LOVE YOU ♥ TE AMO ♥ JE T'AIME ♥ " +
-     "TI AMO ♥ ICH LIEBE DICH ♥ " +
-     "愛してる ♥ 사랑해 ♥ " +
-     "EU TE AMO ♥ Я ТЕБЯ ЛЮБЛЮ ♥ " +
-     "我爱你 ♥ Σ'ΑΓΑΠΩ ♥ ").repeat(30);
+const size = 600;
+canvas.width = size;
+canvas.height = size;
 
-document.getElementById("words1").textContent = words;
-document.getElementById("words2").textContent = words;
+const colors = [
+    "red", "blue", "lime", "yellow",
+    "cyan", "magenta", "orange", "pink"
+];
 
-function openHeart() {
-
-    const heart = document.getElementById("heart");
-
-    heart.classList.toggle("open");
-
-    document.getElementById("instruction").textContent =
-        heart.classList.contains("open")
-        ? "♡ A little secret just for you ♡"
-        : "♡ Touch the heart ♡";
+function heartX(angle) {
+    return 16 * Math.pow(Math.sin(angle), 3);
 }
 
+function heartY(angle) {
+    return 13 * Math.cos(angle)
+        - 5 * Math.cos(2 * angle)
+        - 2 * Math.cos(3 * angle)
+        - Math.cos(4 * angle);
+}
+
+function drawHeart() {
+    ctx.clearRect(0, 0, size, size);
+
+    const scale = 15;
+    const centerX = size / 2;
+    const centerY = size / 2 + 20;
+
+    for (let i = 0; i < 120; i++) {
+        const angle = i * (Math.PI * 2) / 120;
+
+        const x = heartX(angle) * scale;
+        const y = -heartY(angle) * scale;
+
+        const color = colors[
+            Math.floor(Math.random() * colors.length)
+        ];
+
+        ctx.beginPath();
+        ctx.moveTo(centerX + x, centerY + y);
+        ctx.lineTo(centerX, centerY - 40);
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(centerX + x, centerY + y);
+        ctx.strokeStyle = color;
+
+        for (let j = 0; j < 8; j++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(6, 0);
+            ctx.stroke();
+            ctx.rotate(Math.PI / 4);
+        }
+
+        ctx.restore();
+    }
+}
+
+drawHeart();
 </script>
 
 </body>
